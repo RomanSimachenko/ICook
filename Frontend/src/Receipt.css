@@ -1,0 +1,19 @@
+.receipt-source {
+    padding-top: 10px;
+    font-weight: bold;
+}
+
+
+.params {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 18px;
+    text-align: center;
+
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.devider {
+    border-right: rgba(0, 0, 0, 0.5) solid 2px;
+}

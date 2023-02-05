@@ -1,0 +1,35 @@
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    border: none;
+    border-radius: 20px 0 0 20px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
+.search-button {
+    background-color: transparent;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    padding: 0.5rem 1rem;
+}
+
+.search-button img {
+    height: 100%;
+}
+
+h5{
+    color: rgba(223, 143, 79, 0);
+}
+
+.filter-box-container {
+    height: 30%;
+    overflow: auto !important;
+}
+
+.checkbox label {
+    margin-left: 5px;
+}
