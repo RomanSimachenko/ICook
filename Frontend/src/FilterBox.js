@@ -84,34 +84,39 @@ class FilterBox extends React.Component {
                         <img src={dandruffImg} alt="Search icon" height="24" width="24"/>
                     </Button>
                 </Form>
-                <div>
+                {this.props.show_filters ? 
+                    <div style={{
+                        paddingTop: "20px"
+                    }}>
 
-                    <Form.Group>
-                        <Select
-                            multi
-                            options={this.state.categories.map(category => ({value:category.slug,label:category.name})) }
-                            placeholder = "Categories..."
-                            color="#FFAE6D"
-                            onChange={(values) => {
-                                                    this.state.categories_filter = values.map(value => value.value);
-                                                    this.sendFilters()}
-                                      }
-                            />
-                    </Form.Group>
-                    <Form.Group>
-                        <Select
-                            multi
-                            options={this.state.areas.map(area => ({value:area.name,label:area.name})) }
-                            placeholder = "Areas..."
-                            color="#FFAE6D"
-                            onChange={(values) => {
-                                this.state.areas_filter = values.map(value => value.value);
-                                this.sendFilters()}
-                            }
-                        />
+                        <Form.Group>
+                            <Select
+                                multi
+                                options={this.state.categories.map(category => ({value:category.slug,label:category.name})) }
+                                placeholder = "Categories..."
+                                color="#FFAE6D"
+                                onChange={(values) => {
+                                                        this.state.categories_filter = values.map(value => value.value);
+                                                        this.sendFilters()}
+                                        }
+                                />
                         </Form.Group>
-                </div>
-            </div>
+                        <Form.Group>
+                            <Select
+                                multi
+                                options={this.state.areas.map(area => ({value:area.name,label:area.name})) }
+                                placeholder = "Areas..."
+                                color="#FFAE6D"
+                                onChange={(values) => {
+                                    this.state.areas_filter = values.map(value => value.value);
+                                    this.sendFilters()}
+                                }
+                            />
+                            </Form.Group>
+                    </div>
+                    : ""
+            }
+          </div>
         );
     }
 }

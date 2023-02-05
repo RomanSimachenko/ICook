@@ -25,9 +25,6 @@ class Body extends React.Component {
     }
 
     componentDidMount() {
-        if (sessionStorage.getItem("products") != null) {
-            alert("You have: " + sessionStorage.getItem("products"));
-        }
         this.fetchReceipts();
     }
 

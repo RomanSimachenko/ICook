@@ -4,6 +4,8 @@ import {Col, Row} from "react-bootstrap";
 import FilterBox from "./FilterBox";
 import Container from 'react-bootstrap/Container';
 import {CSSTransition} from 'react-transition-group'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const API_URL = "http://localhost:8080/api/v1/products/";
 
@@ -13,18 +15,21 @@ class ProductsBody extends React.Component {
         this.loadMore = this.loadMore.bind(this);
         this.nextPage = this.nextPage.bind(this);
         this.prevPage = this.prevPage.bind(this);
+        this.addToCart = this.addToCart.bind(this);
+        this.closeSuccess = this.closeSuccess.bind(this);
         this.state = {
             page: 1,
             page_size: 12,
             products: [],
             total: 0,
             search_query: '',
-            isLoading: true
+            isLoading: true,
+            success_message: false,
+            lastProduct: ''
         }
     }
 
     componentDidMount() {
-        console.log(sessionStorage.getItem("products"));
         this.fetchProducts();
     }
 
@@ -52,7 +57,6 @@ class ProductsBody extends React.Component {
     }
 
     fetchProducts() {
-        console.log(API_URL + `search=${this.state.search_query};page=${this.state.page};page_size=${this.state.page_size}`);
         fetch(API_URL + `search=${this.state.search_query};page=${this.state.page};page_size=${this.state.page_size}`)
         .then(res => res.json())
         .then(data => {
@@ -76,18 +80,46 @@ class ProductsBody extends React.Component {
         }, this.fetchProducts);
     }
 
+    closeSuccess() {
+        this.setState({
+            success_message: false
+        })
+    }
+
     addToCart(event) {
+        console.log(event.target.id);
+        this.setState({
+            success_message: true,
+            lastProduct: event.target.id
+        });
         if (sessionStorage.getItem("products") == null) {
-            let products = new Set();
-            products.add(event.target.name);
+            let products = []
+            products.push({
+                    name: event.target.id,
+                    slug: event.target.name,
+                    count: 1
+                }
+            );
             sessionStorage.setItem("products", JSON.stringify(Array.from(products)));
             sessionStorage.setItem("products_count", products.size);
         } else {
-            let products = new Set(JSON.parse(sessionStorage.getItem("products")));
-            products.add(event.target.name);
+            let products = JSON.parse(sessionStorage.getItem("products"));
+            if (products.filter(product => product.slug == event.target.name).length == 0) {
+                products.push({
+                    name: event.target.id,
+                    slug: event.target.name,
+                    count: 1
+                });
+            } else {
+                products = products.filter(product => {
+                    if (product.slug == event.target.name) product.count += 1;
+                    return product
+                });
+            }
             sessionStorage.setItem("products", JSON.stringify(Array.from(products)));
             sessionStorage.setItem("products_count", products.size);
         }
+        console.log(sessionStorage.getItem("products"));
     }
 
     render() {
@@ -127,7 +159,7 @@ class ProductsBody extends React.Component {
                                                 </div>
                                                 <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                                     <div className="text-center">
-                                                        <input onClick={this.addToCart} name={product.slug} type="button" value={"Add to cart"} className="btn btn-outline-dark mt-auto" />
+                                                        <input id={product.name} onClick={this.addToCart} name={product.slug} type="button" value={"Add to cart"} className="btn btn-outline-dark mt-auto" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,6 +190,18 @@ class ProductsBody extends React.Component {
                         </li>
                     </ul>
                 </nav>
+                <Snackbar
+                    anchorOrigin={{"vertical": "top", "horizontal": "center"}}
+                    open={this.state.success_message}
+                    onClose={this.closeSuccess}
+                    severity="success"
+                    key={this.state.vertical + this.state.horizontal}
+                    autoHideDuration={1000}
+                >
+                    <MuiAlert onClose={this.closeSuccess} severity="success">
+                        {`Successfully added ${this.state.lastProduct} to cart`}
+                    </MuiAlert>
+                </Snackbar>
             </div>
         );
     }
