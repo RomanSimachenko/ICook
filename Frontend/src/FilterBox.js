@@ -111,8 +111,6 @@ class FilterBox extends React.Component {
                         />
                         </Form.Group>
                 </div>
-            <div></div>}
-    
             </div>
         );
     }
