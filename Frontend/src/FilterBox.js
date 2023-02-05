@@ -19,8 +19,7 @@ class FilterBox extends React.Component {
         this.sendFilters = this.sendFilters.bind(this);
         this.setFindStr = this.setFindStr.bind(this);
         this.sendSearchQuery = this.sendSearchQuery.bind(this);
-        this.addCategory = this.addCategory.bind(this);
-        this.addArea = this.addArea.bind(this);
+
     }
 
     componentDidMount() {
@@ -39,31 +38,6 @@ class FilterBox extends React.Component {
                 areas: data.areas
             });
         });
-    }
-
-    addCategory(event) {
-        if (this.state.categories_filter.indexOf(event.target.value) === -1) {
-            this.setState({
-                categories_filter: [...this.state.categories_filter, event.target.value]
-            }, this.sendFilters);
-        } else {
-            this.setState({
-                categories_filter: this.state.categories_filter.filter(e => e != event.target.value)
-            }, this.sendFilters);
-        }
-    }
-
-    addArea(event) {
-        console.log(event.target.value);
-        if (this.state.areas_filter.indexOf(event.target.value) === -1) {
-            this.setState({
-                areas_filter: [...this.state.areas_filter, event.target.value]
-            }, this.sendFilters);
-        } else {
-            this.setState({
-                areas_filter: this.state.areas_filter.filter(e => e != event.target.value)
-            }, this.sendFilters);
-        }
     }
 
     sendFilters() {
@@ -110,7 +84,6 @@ class FilterBox extends React.Component {
                         <img src={dandruffImg} alt="Search icon" height="24" width="24"/>
                     </Button>
                 </Form>
-                {this.props.show_filters ? 
                 <div>
 
                     <Form.Group>
@@ -119,34 +92,30 @@ class FilterBox extends React.Component {
                             options={this.state.categories.map(category => ({value:category.slug,label:category.name})) }
                             placeholder = "Categories..."
                             color="#FFAE6D"
+                            onChange={(values) => {
+                                                    this.state.categories_filter = values.map(value => value.value);
+                                                    this.sendFilters()}
+                                      }
                             />
                     </Form.Group>
                     <Form.Group>
                         <Select
                             multi
-                            options={this.state.areas.map(area => ({value:area.id,label:area.name})) }
+                            options={this.state.areas.map(area => ({value:area.name,label:area.name})) }
                             placeholder = "Areas..."
                             color="#FFAE6D"
+                            onChange={(values) => {
+                                this.state.areas_filter = values.map(value => value.value);
+                                this.sendFilters()}
+                            }
                         />
-                    </Form.Group>
-                </div> 
-            : 
+                        </Form.Group>
+                </div>
             <div></div>}
     
             </div>
         );
     }
 }
-
-/*const FilterBox = (props) => {
-    const { receipts } = props;
-
-    const categories = [...new Set(receipts.map(receipt => receipt.strCategory))];
-    const areas = [...new Set(receipts.map(receipt => receipt.strArea))];
-
-   
-
-};*/
-
 
 export default FilterBox;
