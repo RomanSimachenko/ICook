@@ -100,6 +100,11 @@ class Body extends React.Component {
                                 <span className="text-count">Receipts Shown </span>
                                 <span className="receipt-count">{this.state.total}</span>
                             </div>
+                            <br />
+                            {this.state.receipts.length == 0 ? 
+                            <div className="alert alert-danger" role="alert">
+                                        There is no receipts with applied filters!
+                            </div> : ""}
                             <CSSTransition
                             in={this.state.isLoading}
                             timeout={1000}
@@ -139,7 +144,8 @@ class Body extends React.Component {
                                             </div>
                                         </div>
                                     );
-                                })}
+                                })
+                            }
                             </div>
                             </CSSTransition>
 
