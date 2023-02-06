@@ -1,10 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 from . import serializers
-from src.main import models
+from main import models
 
 
 @api_view(['GET'])

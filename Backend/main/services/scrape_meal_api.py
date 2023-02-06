@@ -5,7 +5,7 @@ django.setup()
 
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-from src.main import models
+from main import models
 from django.utils.text import slugify
 from django.conf import settings
 
