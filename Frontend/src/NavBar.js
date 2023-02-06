@@ -5,7 +5,6 @@ import './NavBar.css'
 import logo from './logo_image.svg';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const PRODUCTS_THUMB_URL = "http://localhost:8080/media/products/";
@@ -61,7 +60,6 @@ class NavBar extends React.Component {
       >
         <DialogTitle>{"Your products: "}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
           {sessionStorage.getItem("products") !== null ? JSON.parse(sessionStorage.getItem("products")).map((product, index) => {
                           return (
                               <div key={index} className="container-fluid">
@@ -83,7 +81,6 @@ class NavBar extends React.Component {
                               </div>
                           );
                     }) : "You have no products in the cart!"}
-          </DialogContentText>
         </DialogContent>
       </Dialog>
       </div>

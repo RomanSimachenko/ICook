@@ -79,13 +79,20 @@ function Receipt() {
                             }
                         }> 
                             <div className="col-sm devider">{product.name}</div>
-                            <div className="col-sm">0</div>
+                            <div className="col-sm">{sessionStorage.getItem("products") != null ?
+                             JSON.parse(sessionStorage.getItem("products")).find(element => 
+                                    product.slug == element.slug 
+                                ) == undefined ? 0 : JSON.parse(sessionStorage.getItem("products")).find(element => 
+                                    product.slug == element.slug 
+                                ).count
+                            : 0}</div>
                             <div className="col-sm">{product.amount} {product.unit}</div>
                         </div>);
                     }) : ""}
                     <div className="d-flex justify-content-center" style={{
                         width: "30%",
-                        paddingTop: "30px"
+                        paddingTop: "30px",
+                        paddingBottom: "100px"
                     }}>
                         <AwesomeSlider>
                             {

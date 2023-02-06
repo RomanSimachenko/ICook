@@ -26,7 +26,7 @@ h5{
 }
 
 .filter-box-container {
-    height: 30%;
+    height: 300px;
     overflow: auto !important;
 }
 

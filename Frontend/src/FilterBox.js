@@ -13,13 +13,16 @@ class FilterBox extends React.Component {
             areas: [],
             find_str: '',
             categories_filter: [],
-            areas_filter: []
+            areas_filter: [],
+            products: [],
+            amounts: [],
+            products_filter: false
         };
 
         this.sendFilters = this.sendFilters.bind(this);
         this.setFindStr = this.setFindStr.bind(this);
         this.sendSearchQuery = this.sendSearchQuery.bind(this);
-
+        this.setProducts = this.setProducts.bind(this);
     }
 
     componentDidMount() {
@@ -40,6 +43,23 @@ class FilterBox extends React.Component {
         });
     }
 
+    setProducts() {
+        if (!this.state.products_filter) {
+            let session = sessionStorage.getItem("products");
+            this.setState({
+                products_filter: true,
+                products: session === null ? [] : JSON.parse(session).map(e => e.slug),
+                amounts: session === null ? [] : JSON.parse(session).map(e => e.count)
+            }, this.sendFilters)
+        } else {
+            this.setState({
+                products_filter: false,
+                products: [],
+                amounts: []
+            }, this.sendFilters);
+        }
+    }
+
     sendFilters() {
         let filter = "categories=";
         for (let i = 0; i < this.state.categories_filter.length; i++) {
@@ -54,7 +74,23 @@ class FilterBox extends React.Component {
             i == 0 ? filter += area : filter += "," + area;
         }
 
+        filter += ";products=";
+
+        for (let i = 0; i < this.state.products.length; i++) {
+            const product = this.state.products[i];
+            i == 0 ? filter += product : filter += "," + product;
+        }
+
+        filter += ";amounts=";
+
+
+        for (let i = 0; i < this.state.amounts.length; i++) {
+            const amount = this.state.amounts[i];
+            i == 0 ? filter += amount : filter += "," + amount;
+        }
+
         filter += ";";
+
         this.props.body.applyFilters(filter);
     }
 
@@ -68,12 +104,16 @@ class FilterBox extends React.Component {
         });
     }
 
+    preventSubmit(event) {
+        event.preventDefault();
+    }
+
     render() {
         return (
             <div className="filter-box">
                 <h5 className="text-center" style={{ opacity: 0 }}>Filter by: </h5>
     
-                <Form className="d-flex">
+                <Form onSubmit={this.preventSubmit} className="d-flex">
                     <Form.Control key={1}
                         type="search"
                         placeholder="Search"
@@ -113,10 +153,19 @@ class FilterBox extends React.Component {
                                 }
                             />
                             </Form.Group>
+                            <input onClick={this.setProducts} style={
+                                {
+                                    marginTop: "20px"
+                                }
+                            } type="checkbox" value="" id="flexCheckDefault" />
+                            <label style={{
+                                marginLeft: "5px"
+                            }} className="form-check-label" htmlFor="flexCheckDefault">
+                                Filter by my products
+                            </label>
+
                     </div>
-                    : ""
-            }
-          </div>
+                    : "" }          </div>
         );
     }
 }
