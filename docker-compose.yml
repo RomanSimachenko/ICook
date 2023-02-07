@@ -5,9 +5,9 @@ services:
     image: backend:latest
     build: ./Backend
     container_name: backend-latest_c
-    command: python3 ./manage.py runserver 0.0.0.0:8080
+    command: python3 ./manage.py runserver 0.0.0.0:${DJANGO_PORT}
     ports:
-      - "8080:8080"
+      - "${DJANGO_PORT}:${DJANGO_PORT}"
     volumes:
         - ./Backend:/app/backend
         - static_volume:/app/backend/staticfiles
@@ -20,7 +20,7 @@ services:
     container_name: frontend-latest_c
     command: npm start
     ports:
-      - "3000:3000"
+      - "${REACT_PORT}:${REACT_PORT}"
     volumes:
       - "./Frontend:/app/frontend"
     env_file: ./.env
